@@ -23,7 +23,7 @@ class AssetProcess {
 	public function environment($env = null) {
 		if ($env !== null) {
 			// Windows nodejs needs these environment variables.
-			$winenv = $this->__getenv(array('SystemDrive', 'SystemRoot'));
+			$winenv = $this->_getenv(array('SystemDrive', 'SystemRoot'));
 			$this->_env = array_merge($winenv, $env);
 			return $this;
 		}
@@ -32,11 +32,11 @@ class AssetProcess {
 
 /**
  * Gets selected variables from the global environment.
- * @param mixed $vars An array of variable names or a single variable name.
+ * @param mixed $vars An array of variable names.
  * @return An array with values of selected environment variables if they
  *    are set. 
  **/
-	private function __getenv($vars) {
+	protected function _getenv($vars) {
 		$vars = (array)$vars;
 		$result = array();
 		foreach ($vars as $var) {
