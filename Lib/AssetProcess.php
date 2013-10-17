@@ -29,12 +29,28 @@ class AssetProcess {
 	}
 
 /**
+ *  Copies the named variable from $_ENV to $this->_env only if it
+ *  does not already exist in $this->_env.
+ * 
+ * @param string $var The environment variable name.
+ */
+	private function __inheritEnv($var) {
+		if (isset($_ENV[$var]) && isset($this->_env[$var])) {
+			$this->_env[$var] = $_ENV[$var];
+		}
+	}
+
+/**
  * Run the command and capture the output as the return.
  *
  * @param string $input STDIN for the command.
  * @param string Output from the command.
  */
 	public function run($input = null) {
+		// node.exe on Windows must have systemdrive and systemroot set
+		$this->__inheritEnv('SystemDrive');
+		$this->__inheritEnv('SystemRoot');
+
 		$descriptorSpec = array(
 			0 => array('pipe', 'r'),
 			1 => array('pipe', 'w'),
@@ -86,6 +102,8 @@ class AssetProcess {
  * @return $this
  */
 	public function command($command) {
+		// wrap executable name in quotes if necessary for Windows (.exe)
+		$command = preg_replace('/^\s*([^"\s]+\s.+\.exe)(\s|$)/', '"$1"', $command);
 		$this->_command = $command;
 		return $this;
 	}
