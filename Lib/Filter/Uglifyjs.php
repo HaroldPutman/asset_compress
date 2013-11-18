@@ -17,6 +17,16 @@ class Uglifyjs extends AssetFilter {
 	);
 
 /**
+ * Allow some settings to also be defined in bootstrap.php
+ * @param array $settings The settings from asset_compress.ini
+ */
+	public function settings($settings) {
+		$config = array_intersect_key((array)Configure::read('AssetCompress'),
+			array('node' => true, 'node_path' => true, 'uglify' => true));
+		parent::settings(array_merge($settings, $config));
+	}
+
+/**
  * Run `uglifyjs` against the output and compress it.
  *
  * @param string $filename Name of the file being generated.

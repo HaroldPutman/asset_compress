@@ -18,6 +18,16 @@ class CoffeeScript extends AssetFilter {
 	);
 
 /**
+ * Allow some settings to also be defined in bootstrap.php
+ * @param array $settings The settings from asset_compress.ini
+ */
+	public function settings($settings) {
+		$config = array_intersect_key((array)Configure::read('AssetCompress'),
+			array('node' => true, 'node_path' => true, 'coffee' => true));
+		parent::settings(array_merge($settings, $config));
+	}
+
+/**
  * Runs `coffee` against files that match the configured extension.
  *
  * @param string $filename Filename being processed.

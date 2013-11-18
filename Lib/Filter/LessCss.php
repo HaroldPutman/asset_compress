@@ -17,6 +17,16 @@ class LessCss extends AssetFilter {
 	);
 
 /**
+ * Allow settings to also be defined in bootstrap.php
+ * @param array $settings The settings from asset_compress.ini
+ */
+	public function settings($settings) {
+		$config = array_intersect_key((array)Configure::read('AssetCompress'),
+			array('node' => true, 'node_path' => true));
+		parent::settings(array_merge($settings, $config));
+	}
+
+/**
  * Runs `lessc` against any files that match the configured extension.
  *
  * @param string $filename The name of the input file.

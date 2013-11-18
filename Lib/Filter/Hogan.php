@@ -29,6 +29,16 @@ class Hogan extends AssetFilter {
 	);
 
 /**
+ * Allow some settings to also be defined in bootstrap.php
+ * @param array $settings The settings from asset_compress.ini
+ */
+	public function settings($settings) {
+		$config = array_intersect_key((array)Configure::read('AssetCompress'),
+			array('node' => true, 'node_path' => true));
+		parent::settings(array_merge($settings, $config));
+	}
+
+/**
  * Runs `hogan.compile` against all template fragments in a file.
  *
  * @param string $filename The name of the input file.
